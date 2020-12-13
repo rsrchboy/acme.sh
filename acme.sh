@@ -1282,7 +1282,7 @@ _readSubjectAltNamesFromCSR() {
   _csrsubj="$(_readSubjectFromCSR "$_csrfile")"
   _debug _csrsubj "$_csrsubj"
 
-  _dnsAltnames="$(${ACME_OPENSSL_BIN:-openssl} req -noout -text -in "$_csrfile" | grep "^ *DNS:.*" | tr -d ' \n')"
+  _dnsAltnames="$(${ACME_OPENSSL_BIN:-openssl} req -noout -text -in "$_csrfile" | sed "s/IP Address:/DNS:/g" | grep "^ *DNS:.*" | tr -d ' \n')"
   _debug _dnsAltnames "$_dnsAltnames"
 
   if _contains "$_dnsAltnames," "DNS:$_csrsubj,"; then
@@ -5838,7 +5838,7 @@ _deactivate() {
   _initpath
 
   if [ "$ACME_VERSION" = "2" ]; then
-    _identifiers="{\"type\":\"dns\",\"value\":\"$_d_domain\"}"
+    _identifiers="{\"type\":\"$(_getIdType "$_d_domain")\",\"value\":\"$_d_domain\"}"
     if ! _send_signed_request "$ACME_NEW_ORDER" "{\"identifiers\": [$_identifiers]}"; then
       _err "Can not get domain new order."
       return 1
