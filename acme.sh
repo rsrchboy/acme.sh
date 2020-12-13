@@ -4044,8 +4044,7 @@ _isIPv4() {
   if [ "$(echo "$_ip" | tr -d '.' | tr -d '[0-9]')" ]; then
     return 1
   fi
-  for seg in $(echo "$ip" | tr '.' ' ');
-  do
+  for seg in $(echo "$ip" | tr '.' ' '); do
     if [ $seg -lt 0 ] || [ $seg -gt 255 ]; then
       return 1
     fi
@@ -4059,7 +4058,6 @@ _isIPv6() {
   return 1
 }
 
-
 #ip
 _isIP() {
   _isIPv4 "$1" || _isIPv6 "$1"
@@ -4068,9 +4066,9 @@ _isIP() {
 #identifier
 _getIdType() {
   if _isIP "$1"; then
-    echo "$ID_TYPE_IP";
+    echo "$ID_TYPE_IP"
   else
-    echo "$ID_TYPE_DNS";
+    echo "$ID_TYPE_DNS"
   fi
 }
 
