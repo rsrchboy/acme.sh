@@ -66,6 +66,9 @@ _dns_he_ddns_update() {
   if _startswith "$response" "good" ; then
     _info "TXT record updated successfully."
     return 0
+  elif _startswith "$response" "nochg" ; then
+    _info "TXT record already set!"
+    return 0
   elif _startswith "$response" "badauth"; then
     _err "dns.he.net says 'badauth' with the given DDNS key"
     return 1
